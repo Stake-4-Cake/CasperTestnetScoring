@@ -1,4 +1,4 @@
-# Casper Testnet Monitoring Service
+# Casper Testnet Scoring Service
 
 ### Algorithm
 
