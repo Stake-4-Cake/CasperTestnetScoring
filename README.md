@@ -6,7 +6,7 @@ _The cycle consists of the steps below are being executed every 05:00 minutes an
 take up to 30 seconds to be executed_
 
 **1. Collection of public keys, current height and peers.**  
-    By sending a request to the endpoint http://<ip>:8888/status from each node which IP is contained in the Database 
+    By sending a request to the endpoint `http://<ip>:8888/status` from each node which IP is contained in the Database 
     after the completion of the previous cycle, the following are collected and recorded in the Database:  
         - public key;  
         - the current height of the block;  
