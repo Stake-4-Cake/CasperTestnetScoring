@@ -19,7 +19,7 @@ take up to 30 seconds to be executed_
     in the network at the time of the survey is determined (chain tip).
 
 **3. Receiving auction info.**  
-    By sending an RPC request with the state_get_auction_info method to https://rpc.testnet.casperlabs.io/rpc, we get 
+    By sending an RPC request with the state_get_auction_info method to `https://rpc.testnet.casperlabs.io/rpc`, we get 
     all the validators and all the bids in the network for the current era.
 
 **4. Finding network weight and all (100) validators.**  
@@ -42,9 +42,9 @@ take up to 30 seconds to be executed_
     for percent of network exceeding 6%. If the node exceeded this limit at least once per day, 
     then the value True is stored in the stake_over field in the Scoring Database.  
     Longevity is calculated every day as follows:  
-        - If the score at the end of the day N < 90, then the longevity is reset;
-        - Otherwise, the longevity is updated by increasing the longevity at the end of the N - 1 day by the value 
-        of the score obtained for the N day.
+        - If the score at the end of the `N day` < 90, then the longevity is reset;
+        - Otherwise, the longevity is updated by increasing the longevity at the end of the `N - 1 day` by the value 
+        of the score obtained for the `N day`.
 
 **8. Determination of weekly scoring.**  
     The number of points scored during the week is calculated as the sum of points scored for each day of this week 
