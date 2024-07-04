@@ -70,7 +70,7 @@ class Scoring(models.Model):
     timestamp = models.CharField(_("Timestamp"), max_length=128)
 
     class Meta:
-        ordering = ('-score', '-longevity', '-timestamp',)
+        ordering = ('-score', '-longevity',)
         verbose_name = _("Scoring")
         verbose_name_plural = _("Scoring")
 
