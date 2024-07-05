@@ -4,11 +4,12 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 django.setup()
 
+from django.conf import settings
+from src.core import models
+
 import asyncio
 import datetime
 import aiohttp
-from django.conf import settings
-from src.core import models
 from bs4 import BeautifulSoup
 import time
 import json
@@ -377,9 +378,9 @@ async def calculate_quarter_rewards():
         # Process each week in the Database for the public key
         for scoring in models.Scoring.objects.filter(node=node, type='W'):
             # Get week start-end dates as datetime object
-            week_dates = scoring.timestamp.split(': ')[1].split(' - ')
-            start_of_week = datetime.datetime.strptime(week_dates[0], '%Y.%m.%d').date()
-            end_of_week = datetime.datetime.strptime(week_dates[1], '%Y.%m.%d').date()
+            start_of_week, end_of_week = (part.strip() for part in scoring.timestamp.split(':')[-1].split('-'))
+            start_of_week, end_of_week = (datetime.datetime.strptime(start_of_week, '%Y.%m.%d').date(),
+                                          datetime.datetime.strptime(end_of_week, '%Y.%m.%d').date())
 
             # Check if week belongs to current quarter
             if start_of_quarter <= start_of_week <= end_of_quarter and start_of_quarter <= end_of_week <= end_of_quarter:
