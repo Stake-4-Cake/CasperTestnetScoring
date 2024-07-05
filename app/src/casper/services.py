@@ -8,6 +8,7 @@ import time
 import json
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 django.setup()
 from django.conf import settings
 from src.core import models
@@ -421,10 +422,10 @@ async def main():
     print(datetime.datetime.now(), time.time() - start_time, '\n')
 
 
-if __name__ == '__main__':
-    # asyncio.run(main())
-
-    while True:
-        if not datetime.datetime.now().minute % 5 and not datetime.datetime.now().second:
-            asyncio.run(main())
-        time.sleep(0.3)
+# if __name__ == '__main__':
+#     # asyncio.run(main())
+#
+#     while True:
+#         if not datetime.datetime.now().minute % 5 and not datetime.datetime.now().second:
+#             asyncio.run(main())
+#         time.sleep(0.3)
