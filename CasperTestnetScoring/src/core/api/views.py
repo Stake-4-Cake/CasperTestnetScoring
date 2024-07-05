@@ -1,4 +1,3 @@
-from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -126,12 +125,12 @@ def get_days(request, week, format=None):
 def get_intervals(request, day, format=None):
     request_url = f"{request.scheme}://{request.get_host()}{request.get_full_path()}"
 
-    day = datetime.datetime.strptime(day, '%Y.%m.%d')
-
     public_key = request.GET.get('public_key', None)
 
     try:
         if public_key is not None:
+            day = datetime.datetime.strptime(day, '%Y.%m.%d')
+
             score = models.Score.objects.filter(node__public_key=public_key.strip().lower(), timestamp__date=day)
 
             serializer = serializers.ScoreSerializer(score, many=True)

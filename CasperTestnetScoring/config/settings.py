@@ -1,5 +1,3 @@
-import os
-import json
 from pathlib import Path
 
 
@@ -117,12 +115,15 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+DJANGO_ALLOW_ASYNC_UNSAFE = True
+
 STATUS_ENDPOINT_URL = 'http://{}:8888/status'
 
 RPC_URL = 'http://{}:7777/rpc'
 
 CASPER_STATUS_HEADERS = {
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,'
+              'application/signed-exchange;v=b3;q=0.7',
     'Accept-Language': 'en-US,en;q=0.9,uk;q=0.8',
     'Cache-Control': 'max-age=0',
     'Connection': 'keep-alive',
@@ -130,12 +131,11 @@ CASPER_STATUS_HEADERS = {
 }
 
 CNM_HEADERS = {
-    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,'
+              'application/signed-exchange;v=b3;q=0.7',
     'accept-language': 'en-US,en;q=0.9,uk;q=0.8',
     'cache-control': 'max-age=0',
     'priority': 'u=0, i'
 }
-
-DJANGO_ALLOW_ASYNC_UNSAFE = True
 
 TRUSTED_RPC = 'https://cnm.casperlabs.io/network/casper-test/detail'

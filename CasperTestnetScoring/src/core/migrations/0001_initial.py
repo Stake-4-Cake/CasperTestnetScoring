@@ -53,7 +53,8 @@ class Migration(migrations.Migration):
             name='Scoring',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(choices=[('D', 'Day'), ('W', 'Week'), ('Q', 'Quarter')], default='D', max_length=1, verbose_name='Type')),
+                ('type', models.CharField(choices=[('D', 'Day'), ('W', 'Week'), ('Q', 'Quarter')], default='D',
+                                          max_length=1, verbose_name='Type')),
                 ('score', models.FloatField(default=0, verbose_name='Score')),
                 ('longevity', models.FloatField(default=0, verbose_name='Longevity')),
                 ('stake_over', models.BooleanField(default=False, verbose_name='Stake Over')),

@@ -1,18 +1,16 @@
 import os
 import django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
-os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
-django.setup()
-
-from django.conf import settings
-from src.core import models
-
 import asyncio
 import datetime
 import aiohttp
 from bs4 import BeautifulSoup
 import time
 import json
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+django.setup()
+from django.conf import settings
+from src.core import models
 
 
 async def get_status(ip: str) -> (str, dict,):
@@ -54,7 +52,7 @@ async def get_cnm_ips(session) -> set:
         # Scrape CNM HTML page and collect IPs
         for ip in soup.find_all('tr')[1:]:
             ips.add(ip.find('td').text.strip())
-    except Exception as error:
+    except Exception:
         pass
 
     return ips
@@ -105,7 +103,7 @@ async def get_auction_info(session) -> dict:
             resp_json = await resp.json()
 
             return resp_json
-        except Exception as error:
+        except Exception:
             await asyncio.sleep(1)
     else:
         return {}
@@ -139,7 +137,8 @@ async def update_auction_info() -> None:
         for node in models.Node.objects.filter(public_key=bid['public_key'].strip().lower()):
             node.active_bid = not bid['bid']['inactive']
             node.network_weight = network_weight
-            node.total_stake = sum(int(delegator['staked_amount']) for delegator in bid['bid']['delegators']) + int(bid['bid']['staked_amount'])
+            node.total_stake = (sum(int(delegator['staked_amount']) for delegator in bid['bid']['delegators']) +
+                                int(bid['bid']['staked_amount']))
             node.percent_of_network = (node.total_stake * 100) / network_weight if node.public_key in validators else 0
             node.save()
 
@@ -173,12 +172,12 @@ async def monitoring_score() -> None:
 
         try:
             pk = resp['our_public_signing_key'].strip().lower()
-        except Exception as error:
+        except Exception:
             pk = ''
 
         try:
             height = int(resp['last_added_block_info']['height'])
-        except Exception as error:
+        except Exception:
             height = 0
 
         # Save Public Key and Height in Database
