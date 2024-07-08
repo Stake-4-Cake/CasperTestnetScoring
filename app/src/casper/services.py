@@ -248,7 +248,7 @@ async def calculate_day_scoring():
         scores = models.Score.objects.filter(node__public_key=public_key, timestamp__date=day_now)
 
         # Find how many times the public key was active during current day
-        active_scores = len(scores.filter(active=True))
+        active_scores = scores.filter(active=True).count()
 
         # Calculate public key's score for current day
         score = (active_scores / max_scores) * 100
@@ -300,7 +300,7 @@ async def _get_week(date):
     week = (date.date() - datetime.datetime(date.year, (date.month - 1) // 3 * 3 + 1, 1).date()).days // 7 + 1
     week_now = f"W{week}: {start_of_week.strftime('%Y.%m.%d')} - {end_of_week.strftime('%Y.%m.%d')}"
 
-    return start_of_week, end_of_week, week_now
+    return start_of_week.date(), end_of_week.date(), week_now
 
 
 async def calculate_week_scoring():
@@ -311,11 +311,11 @@ async def calculate_week_scoring():
     print(datetime.datetime.now(), f'Make {week_now} Week Scoring')
 
     for public_key in set(models.Node.objects.exclude(public_key='').values_list('public_key', flat=True)):
-        score, stake_over, latest_day, longevity = 0, False, datetime.datetime.min, 0
+        score, stake_over, latest_day, longevity = 0, False, datetime.datetime.min.date(), 0
 
         # Process each day in the Database for the public key
         for scoring in models.Scoring.objects.filter(public_key=public_key, type='D'):
-            day = datetime.datetime.strptime(scoring.timestamp, '%Y.%m.%d')
+            day = datetime.datetime.strptime(scoring.timestamp, '%Y.%m.%d').date()
 
             # Check if day belongs to curren week
             if start_of_week <= day <= end_of_week:
@@ -351,7 +351,7 @@ async def calculate_week_scoring():
 async def determine_eligible_rewards():
     """Determines what public keys (100) are eligible for rewards at the current week"""
 
-    start_of_week, end_of_week, week_now = await _get_week(datetime.datetime.today())
+    *_, week_now = await _get_week(datetime.datetime.today())
 
     print(datetime.datetime.now(), f'Determine {week_now} Week Eligible for Rewards')
 
@@ -394,7 +394,7 @@ async def calculate_quarter_rewards():
                                           datetime.datetime.strptime(end_of_week, '%Y.%m.%d').date())
 
             # Check if week belongs to current quarter
-            if start_of_quarter <= start_of_week <= end_of_quarter and start_of_quarter <= end_of_week <= end_of_quarter:
+            if start_of_quarter <= start_of_week <= end_of_quarter:
                 # Update total quarter rewards with week rewards if public key is eligible for rewards in the week
                 if scoring.eligible_for_rewards:
                     score += scoring.score
@@ -433,10 +433,10 @@ async def main():
     print(datetime.datetime.now(), time.time() - start_time, '\n')
 
 
-if __name__ == '__main__':
-    asyncio.run(main())
-
-    # while True:
-    #     if not datetime.datetime.now().minute % 5 and not datetime.datetime.now().second:
-    #         asyncio.run(main())
-    #     time.sleep(0.3)
+# if __name__ == '__main__':
+#     asyncio.run(main())
+#
+#     while True:
+#         if not datetime.datetime.now().minute % 5 and not datetime.datetime.now().second:
+#             asyncio.run(main())
+#         time.sleep(0.3)
