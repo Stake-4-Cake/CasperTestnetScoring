@@ -61,7 +61,7 @@ class Scoring(models.Model):
         ('Q', 'Quarter')
     ]
 
-    public_key = models.CharField(_("Public Key"), max_length=128, default='')
+    public_key = models.CharField(_("Public Key"), max_length=128)
     type = models.CharField(_("Type"), max_length=1, choices=TYPE_CHOICES, default='D')
     score = models.FloatField(_("Score"), default=0)
     longevity = models.FloatField(_("Longevity"), default=0)
