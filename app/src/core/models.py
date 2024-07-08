@@ -61,7 +61,7 @@ class Scoring(models.Model):
         ('Q', 'Quarter')
     ]
 
-    node = models.ForeignKey(Node, on_delete=models.CASCADE, verbose_name=(_("Node")))
+    public_key = models.CharField(_("Public Key"), max_length=128, default='')
     type = models.CharField(_("Type"), max_length=1, choices=TYPE_CHOICES, default='D')
     score = models.FloatField(_("Score"), default=0)
     longevity = models.FloatField(_("Longevity"), default=0)
@@ -78,4 +78,4 @@ class Scoring(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.node.public_key}"
+        return f"{self.public_key}"

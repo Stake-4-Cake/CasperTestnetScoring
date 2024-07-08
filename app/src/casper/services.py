@@ -100,7 +100,6 @@ async def get_auction_info(session) -> dict:
                 data=payload,
                 timeout=30
             )
-            assert resp.status == 200
             resp_json = await resp.json()
 
             return resp_json
@@ -244,9 +243,9 @@ async def calculate_day_scoring():
 
     print(datetime.datetime.now(), f'Max Scores {max_scores}')
 
-    for node in models.Node.objects.exclude(public_key=''):
+    for public_key in set(models.Node.objects.exclude(public_key='').values_list('public_key', flat=True)):
         # Get all recorded scores that belongs to public key
-        scores = models.Score.objects.filter(node=node, timestamp__date=day_now)
+        scores = models.Score.objects.filter(node__public_key=public_key, timestamp__date=day_now)
 
         # Find how many times the public key was active during current day
         active_scores = len(scores.filter(active=True))
@@ -262,8 +261,16 @@ async def calculate_day_scoring():
             longevity = 0
         else:
             # Try to get previous day longevity, if previous day longevity not found then consider it is 0
-            if models.Scoring.objects.filter(node=node, timestamp=previous_day.strftime('%Y.%m.%d'), type='D').exists():
-                scoring = models.Scoring.objects.get(node=node, timestamp=previous_day.strftime('%Y.%m.%d'), type='D')
+            if models.Scoring.objects.filter(
+                    public_key=public_key,
+                    timestamp=previous_day.strftime('%Y.%m.%d'),
+                    type='D'
+            ).exists():
+                scoring = models.Scoring.objects.get(
+                    public_key=public_key,
+                    timestamp=previous_day.strftime('%Y.%m.%d'),
+                    type='D'
+                )
                 longevity = scoring.longevity
             else:
                 longevity = 0
@@ -273,7 +280,11 @@ async def calculate_day_scoring():
 
         # Get or create scoring object for public key, current day and save the following information:
         # current day score, current day longevity and if public key staked over 6%
-        scoring = models.Scoring.objects.get_or_create(node=node, timestamp=day_now.strftime('%Y.%m.%d'), type='D')[0]
+        scoring = models.Scoring.objects.get_or_create(
+            public_key=public_key,
+            timestamp=day_now.strftime('%Y.%m.%d'),
+            type='D'
+        )[0]
         scoring.score = score
         scoring.longevity = longevity
         if stake_over:
@@ -299,11 +310,11 @@ async def calculate_week_scoring():
 
     print(datetime.datetime.now(), f'Make {week_now} Week Scoring')
 
-    for node in models.Node.objects.exclude(public_key=''):
+    for public_key in set(models.Node.objects.exclude(public_key='').values_list('public_key', flat=True)):
         score, stake_over, latest_day, longevity = 0, False, datetime.datetime.min, 0
 
         # Process each day in the Database for the public key
-        for scoring in models.Scoring.objects.filter(node=node, type='D'):
+        for scoring in models.Scoring.objects.filter(public_key=public_key, type='D'):
             day = datetime.datetime.strptime(scoring.timestamp, '%Y.%m.%d')
 
             # Check if day belongs to curren week
@@ -329,7 +340,7 @@ async def calculate_week_scoring():
             score *= 0.9
 
         # Save current week scoring for each public key
-        scoring = models.Scoring.objects.get_or_create(node=node, timestamp=week_now, type='W')[0]
+        scoring = models.Scoring.objects.get_or_create(public_key=public_key, timestamp=week_now, type='W')[0]
         scoring.longevity = longevity
         scoring.score = score
         if stake_over:
@@ -372,11 +383,11 @@ async def calculate_quarter_rewards():
 
     print(datetime.datetime.now(), f'Make {quarter_now} Quarter Scoring')
 
-    for node in models.Node.objects.exclude(public_key=''):
+    for public_key in set(models.Node.objects.exclude(public_key='').values_list('public_key', flat=True)):
         score, stake_over, latest_week, longevity = 0, False, datetime.datetime.min.date(), 0
 
         # Process each week in the Database for the public key
-        for scoring in models.Scoring.objects.filter(node=node, type='W'):
+        for scoring in models.Scoring.objects.filter(public_key=public_key, type='W'):
             # Get week start-end dates as datetime object
             start_of_week, end_of_week = (part.strip() for part in scoring.timestamp.split(':')[-1].split('-'))
             start_of_week, end_of_week = (datetime.datetime.strptime(start_of_week, '%Y.%m.%d').date(),
@@ -395,7 +406,7 @@ async def calculate_quarter_rewards():
                     latest_week, longevity = start_of_week, scoring.longevity
 
         # Save current quarter rewards for each public key
-        scoring = models.Scoring.objects.get_or_create(node=node, timestamp=quarter_now, type='Q')[0]
+        scoring = models.Scoring.objects.get_or_create(public_key=public_key, timestamp=quarter_now, type='Q')[0]
         scoring.longevity = longevity
         scoring.score = score
         if stake_over:
@@ -422,10 +433,10 @@ async def main():
     print(datetime.datetime.now(), time.time() - start_time, '\n')
 
 
-# if __name__ == '__main__':
-#     # asyncio.run(main())
-#
-#     while True:
-#         if not datetime.datetime.now().minute % 5 and not datetime.datetime.now().second:
-#             asyncio.run(main())
-#         time.sleep(0.3)
+if __name__ == '__main__':
+    asyncio.run(main())
+
+    # while True:
+    #     if not datetime.datetime.now().minute % 5 and not datetime.datetime.now().second:
+    #         asyncio.run(main())
+    #     time.sleep(0.3)

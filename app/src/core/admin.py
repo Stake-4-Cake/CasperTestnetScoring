@@ -29,9 +29,9 @@ class ScoreAdmin(admin.ModelAdmin):
 @admin.register(models.Scoring)
 class ScoringAdmin(admin.ModelAdmin):
     save_on_top = True
-    list_display = ('node', 'score', 'longevity', 'type', 'stake_over', 'eligible_for_rewards', 'timestamp',)
-    list_display_links = ('node',)
-    search_fields = ('node__public_key', 'timestamp',)
+    list_display = ('public_key', 'score', 'longevity', 'type', 'stake_over', 'eligible_for_rewards', 'timestamp',)
+    list_display_links = ('public_key',)
+    search_fields = ('public_key', 'timestamp',)
     list_filter = ('type', 'stake_over', 'eligible_for_rewards', 'timestamp',)
     list_per_page = 1_000
     list_max_show_all = 10_000
