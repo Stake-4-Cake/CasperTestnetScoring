@@ -8,7 +8,7 @@ from src.core.api import serializers
 
 
 @api_view(['GET'])
-def get_quarters(request, format=None):
+def get_quarters_view(request, format=None):
     request_url = f"{request.scheme}://{request.get_host()}{request.get_full_path()}"
 
     try:
@@ -38,7 +38,7 @@ def get_quarters(request, format=None):
 
 
 @api_view(['GET'])
-def get_weeks(request, quarter, format=None):
+def get_weeks_view(request, quarter, format=None):
     request_url = f"{request.scheme}://{request.get_host()}{request.get_full_path()}"
 
     try:
@@ -81,7 +81,7 @@ def get_weeks(request, quarter, format=None):
 
 
 @api_view(['GET'])
-def get_days(request, week, format=None):
+def get_days_view(request, week, format=None):
     request_url = f"{request.scheme}://{request.get_host()}{request.get_full_path()}"
 
     try:
@@ -122,7 +122,7 @@ def get_days(request, week, format=None):
 
 
 @api_view(['GET'])
-def get_intervals(request, day, format=None):
+def get_intervals_view(request, day, format=None):
     request_url = f"{request.scheme}://{request.get_host()}{request.get_full_path()}"
 
     public_key = request.GET.get('public_key', None)
