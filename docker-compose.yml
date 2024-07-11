@@ -68,7 +68,7 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email {email} -d {domain} --agree-tos
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email s4c.data@gmail.com -d s4c.pro --agree-tos
 
 volumes:
   postgres_data:
