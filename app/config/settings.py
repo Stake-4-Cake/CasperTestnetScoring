@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", 'foo')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', '[::1]', 's4c.pro']
 
@@ -152,8 +152,8 @@ TRUSTED_RPC = 'https://cnm.casperlabs.io/network/casper-test/detail'
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:80"]
 
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://redis:6379/0")
-CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", "redis://redis:6379/0")
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
