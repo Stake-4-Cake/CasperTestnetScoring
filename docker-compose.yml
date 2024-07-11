@@ -21,7 +21,7 @@ services:
 
   web:
     build: ./app
-    container_name: django
+    container_name: web
     command: sh -c "python manage.py migrate --noinput && python manage.py collectstatic --noinput --clear && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
 #    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
     restart: always
@@ -61,6 +61,14 @@ services:
       - redis
     env_file:
       - ./.env
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email {email} -d {domain} --agree-tos
 
 volumes:
   postgres_data:
