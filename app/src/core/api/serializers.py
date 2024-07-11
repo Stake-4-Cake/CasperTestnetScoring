@@ -10,8 +10,6 @@ class NodeSerializer(serializers.ModelSerializer):
 
 
 class ScoringSerializer(serializers.ModelSerializer):
-    node = NodeSerializer()
-
     class Meta:
         model = models.Scoring
         fields = '__all__'
