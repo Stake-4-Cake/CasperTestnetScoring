@@ -150,7 +150,7 @@ CNM_HEADERS = {
 
 TRUSTED_RPC = 'https://cnm.casperlabs.io/network/casper-test/detail'
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:80", 'https://s4c.pro:80']
+CSRF_TRUSTED_ORIGINS = ["http://localhost:80", 'https://s4c.pro']
 
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
