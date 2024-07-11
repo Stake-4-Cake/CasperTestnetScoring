@@ -52,7 +52,7 @@ def get_weeks(request, quarter, format=None):
             start_of_week, end_of_week = (datetime.datetime.strptime(start_of_week, '%Y.%m.%d'),
                                           datetime.datetime.strptime(end_of_week, '%Y.%m.%d'))
 
-            if start_of_quarter <= start_of_week <= end_of_quarter and start_of_quarter <= end_of_week <= end_of_quarter:
+            if start_of_quarter <= start_of_week <= end_of_quarter:
                 weeks.append(week.id)
 
         scoring = models.Scoring.objects.filter(type='W', id__in=weeks)
