@@ -9,7 +9,7 @@ from src.core.api import serializers
 
 @api_view(['GET'])
 def get_quarters_view(request, format=None):
-    request_url = f"{request.scheme}://{request.get_host()}{request.get_full_path()}"
+    request_url = f"https://{request.get_host()}{request.get_full_path()}"
 
     try:
         scoring = models.Scoring.objects.filter(type='Q')
@@ -39,7 +39,7 @@ def get_quarters_view(request, format=None):
 
 @api_view(['GET'])
 def get_weeks_view(request, quarter, format=None):
-    request_url = f"{request.scheme}://{request.get_host()}{request.get_full_path()}"
+    request_url = f"https://{request.get_host()}{request.get_full_path()}"
 
     try:
         start_of_quarter, end_of_quarter = (part.strip() for part in quarter.split(':')[-1].split('-'))
@@ -82,7 +82,7 @@ def get_weeks_view(request, quarter, format=None):
 
 @api_view(['GET'])
 def get_days_view(request, week, format=None):
-    request_url = f"{request.scheme}://{request.get_host()}{request.get_full_path()}"
+    request_url = f"https://{request.get_host()}{request.get_full_path()}"
 
     try:
         start_of_week, end_of_week = (part.strip() for part in week.split(':')[-1].split('-'))
@@ -123,7 +123,7 @@ def get_days_view(request, week, format=None):
 
 @api_view(['GET'])
 def get_intervals_view(request, day, format=None):
-    request_url = f"{request.scheme}://{request.get_host()}{request.get_full_path()}"
+    request_url = f"https://{request.get_host()}{request.get_full_path()}"
 
     public_key = request.GET.get('public_key', None)
 
