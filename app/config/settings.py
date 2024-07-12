@@ -11,11 +11,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY", 'foo')
-
+print(SECRET_KEY)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', '[::1]', 's4c.pro']
+ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', '[::1]', '.s4c.pro']
 
 
 # Application definition
@@ -150,7 +150,7 @@ CNM_HEADERS = {
 
 TRUSTED_RPC = 'https://cnm.casperlabs.io/network/casper-test/detail'
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:80", 'https://s4c.pro']
+CSRF_TRUSTED_ORIGINS = ['https://s4c.pro']
 
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
